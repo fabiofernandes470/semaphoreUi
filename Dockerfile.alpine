@@ -1,0 +1,20 @@
+FROM semaphoreui/semaphore:latest
+
+# Trocar para o usuário root para instalar dependências
+USER root
+# Instalar pacotes necessários para Paramiko
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    gcc \
+    musl-dev \
+    libffi-dev \
+    openssl-dev && \
+    pip3 install --no-cache-dir paramiko && \
+    apk del gcc musl-dev libffi-dev
+
+# Limpar cache para reduzir o tamanho da imagem
+RUN rm -rf /var/cache/apk/*
+
+# Voltar ao usuário padrão
+USER 1001
